@@ -11,12 +11,14 @@
 
         <div class="alert alert-success" role="alert" *ngIf="getRegistrationStatus('registerSuccess')">
             Registration Successful
-        </div>
-        <div class="alert alert-danger" role = "alert" *ngIf="getRegistrationStatus('errorOccured')">
-            Error Occured !! User already Exist 
+            <br>
             <a routerLink="/">Log In</a>
         </div>
-        <form (ngSubmit)="onSubmit(firstName , lastName , doctorId , description , userName ,password ,phoneNumber)"
+        <div class="alert alert-danger" role = "alert" *ngIf="getRegistrationStatus('errorOccured')">
+            Error Occured
+            <a routerLink="/">Log In</a>
+        </div>
+        <form (ngSubmit)="onSubmit(registrationForm)"
             #registrationForm="ngForm">
             <div class="form-group">
                 <label for="firstName">First Name</label>

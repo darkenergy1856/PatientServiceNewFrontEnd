@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from '../login/login.service';
 import { Register } from '../login/register';
@@ -34,30 +35,24 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  onSubmit(firstName: HTMLInputElement,
-    lastName: HTMLInputElement,
-    doctorId: HTMLInputElement,
-    description: HTMLInputElement,
-    userName: HTMLInputElement,
-    password: HTMLInputElement,
-    phoneNumber: HTMLInputElement) {
-    this.registerDoctor.firstName = firstName.value
-    this.registerDoctor.lastName = lastName.value
-    this.registerDoctor.userName = userName.value
-    this.registerDoctor.description = description.value
-    this.registerDoctor.phoneNumber = +phoneNumber.value
-    this.registerDoctor.doctorId = doctorId.value
-    this.registerDoctor.password = password.value
+  onSubmit(form : NgForm) {
+
+    this.errorOccured = false
+    this.registerSuccess = false
+
+    this.registerDoctor.firstName = form.value.firstName
+    this.registerDoctor.lastName = form.value.lastName
+    this.registerDoctor.userName = form.value.userName
+    this.registerDoctor.description = form.value.description
+    this.registerDoctor.phoneNumber = +form.value.phoneNumber
+    this.registerDoctor.doctorId = form.value.doctorId
+    this.registerDoctor.password = form.value.password
 
     this.loginService.registerDoctor(this.registerDoctor).subscribe(resData => {}, error => {
       this.errorOccured = true
      }, () => {
       this.registerSuccess = true;
     })
-
-    if (this.registerSuccess === true) {
-      this.router.navigateByUrl("/")
-    }
 
   }
 }

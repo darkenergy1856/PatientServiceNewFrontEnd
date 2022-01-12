@@ -2,6 +2,13 @@ import { Component,OnInit,} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { LoginService } from './login.service';
 
+
+interface user {
+  email : string,
+  password : string
+}
+
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -9,13 +16,7 @@ import { LoginService } from './login.service';
 })
 export class LoginComponent implements OnInit {
 
-  private user! : {
-
-    email : '',
-    password : ''
-
-  }
-
+  private user = {} as user
     
   constructor(private loginService : LoginService) { 
   }
@@ -25,10 +26,7 @@ export class LoginComponent implements OnInit {
 
   login(form : NgForm){
     this.user = form.value
-    this.loginService.setUserNameAndPassword(this.user.email, this.user.password).subscribe(Response => {
-      alert(Response)
-    } , error => {
-      console.log(error)
+    this.loginService.setUserNameAndPassword(this.user.email, this.user.password).subscribe(Response => {} , error => {console.log(error)
     })
     form.reset()
    }

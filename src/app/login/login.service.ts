@@ -4,7 +4,7 @@ import { Register } from './register';
 import { environment } from 'src/environments/environment';
 
 
-interface AuthResponseData {
+export interface  AuthResponseData{
   access_token: string;
   token_type: string;
   refresh_token: string;
