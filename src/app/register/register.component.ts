@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from '../login/login.service';
-import { Register } from '../login/register';
+import { LoginService } from '../services/login.service';
+import { Register } from '../Entity/register';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit {
 
   private registerDoctor = {} as Register;
 
-  constructor(private loginService: LoginService, private router: Router) {
+  constructor(private loginService: LoginService) {
     this.registerSuccess = false
     this.errorOccured = false
   }

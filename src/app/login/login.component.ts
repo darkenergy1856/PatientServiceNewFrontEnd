@@ -1,6 +1,6 @@
 import { Component,OnInit,} from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { LoginService } from './login.service';
+import { LoginService } from '../services/login.service';
 
 
 interface user {
@@ -26,8 +26,7 @@ export class LoginComponent implements OnInit {
 
   login(form : NgForm){
     this.user = form.value
-    this.loginService.setUserNameAndPassword(this.user.email, this.user.password).subscribe(Response => {} , error => {console.log(error)
-    })
+    this.loginService.setUserNameAndPassword(this.user.email, this.user.password)
     form.reset()
    }
 

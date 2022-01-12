@@ -15,8 +15,7 @@
             <a routerLink="/">Log In</a>
         </div>
         <div class="alert alert-danger" role = "alert" *ngIf="getRegistrationStatus('errorOccured')">
-            Error Occured
-            <a routerLink="/">Log In</a>
+            Error Occured !! Try Again
         </div>
         <form (ngSubmit)="onSubmit(registrationForm)"
             #registrationForm="ngForm">

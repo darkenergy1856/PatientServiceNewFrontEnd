@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Register } from './register';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { Register } from '../Entity/register';
 import { environment } from 'src/environments/environment';
+import { Doctor } from '../Entity/doctor';
 
 
 export interface  AuthResponseData{
@@ -20,13 +21,15 @@ export interface  AuthResponseData{
 export class LoginService {
   private baseURL: String
 
+  private authResponse  =  {} as AuthResponseData
+
+  private doctorDetail = {} as Doctor
+
   constructor(private httpClient: HttpClient) {
     this.baseURL = 'http://localhost:8777/';
   }
 
   setUserNameAndPassword(userName: string, password: string) {
-    console.log('UserName : ' + userName)
-    console.log('Password : ' + password)
 
     const formData = new FormData();
 
@@ -34,8 +37,16 @@ export class LoginService {
     formData.append('password', password)
     formData.append('grant_type', 'password')
 
-    return this.httpClient.post<AuthResponseData>(this.baseURL + 'oauth/token', formData, {
+    this.httpClient.post<AuthResponseData>(this.baseURL + 'oauth/token', formData, {
       headers: new HttpHeaders({ Authorization: "Basic " + btoa(environment.clientUsername + ':' + environment.clientPassword) })
+    }).subscribe(response => {
+      this.authResponse  = response;
+      console.log(this.authResponse)
+      // this.getDetails(userName).subscribe(response =>{
+      //   this.doctorDetail = response
+      // })
+    } , error =>{
+      alert(error.error.error_description)
     })
   }
 
@@ -51,5 +62,15 @@ export class LoginService {
     formData.append('password', newDoctor.password)
 
     return this.httpClient.post(this.baseURL + 'register', formData)
+  }
+
+  getDetails(userName : string) {
+
+    const param = new HttpParams()
+    param.set('userName' , userName)
+
+    return this.httpClient.get<Doctor>(this.baseURL + 'doctorService/detail' , {
+      params : param,
+    })
   }
 }
