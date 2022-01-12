@@ -1,0 +1,58 @@
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Register Yourself with US </span>
+        <button class="btn btn-dark" type="button" routerLink="/">Login</button>
+    </div>
+</nav>
+
+
+<div class="row" style="margin-left: 30%; margin-top: 5%;">
+    <div class="col-xs-12 col-6 col-md-offset-3">
+
+        <div class="alert alert-success" role="alert" *ngIf="getRegistrationStatus('registerSuccess')">
+            Registration Successful
+        </div>
+        <div class="alert alert-danger" role = "alert" *ngIf="getRegistrationStatus('errorOccured')">
+            Error Occured !! User already Exist 
+            <a routerLink="/">Log In</a>
+        </div>
+        <form (ngSubmit)="onSubmit(firstName , lastName , doctorId , description , userName ,password ,phoneNumber)"
+            #registrationForm="ngForm">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" class="form-control" ngModel name="firstName" required #firstName>
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" class="form-control" ngModel name="lastName" #lastName>
+            </div>
+            <div class="form-group">
+                <label for="emailID">E-Mail</label>
+                <input type="email" id="emailID" class="form-control" ngModel name="userName" email required #userName>
+            </div>
+            <div class="form-group">
+                <label for="doctorID">Doctor ID</label>
+                <input type="text" id="doctorID" class="form-control" ngModel name="doctorId" required #doctorId>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="number" id="phoneNumber" class="form-control" ngModel name="phoneNumber" required
+                    #phoneNumber>
+            </div>
+            <div class="form-group">
+                <label for="description">Describe Yourself</label>
+                <input type="text" id="description" class="form-control" ngModel name="description" #description>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" ngModel name="password" required #password>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="form-control" ngModel name="confirmPassword"
+                    required>
+            </div>
+            <div style="margin-top: 10px;">
+                <button class="btn btn-success" [disabled]="!registrationForm.valid">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
