@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Register } from '../Entity/register';
 import { environment } from 'src/environments/environment';
 import { Doctor } from '../Entity/doctor';
+import { LoggedInUser } from '../Entity/logged-in-user';
+import { Subject } from 'rxjs';
+import { Router } from '@angular/router';
 
 
-export interface  AuthResponseData{
+
+export interface AuthResponseData {
   access_token: string;
   token_type: string;
   refresh_token: string;
@@ -21,12 +25,14 @@ export interface  AuthResponseData{
 export class LoginService {
   private baseURL: String
 
-  private authResponse  =  {} as AuthResponseData
+  private authResponse = {} as AuthResponseData
 
-  private doctorDetail = {} as Doctor
+  doctorDetail = new Subject<Doctor>()
 
-  constructor(private httpClient: HttpClient) {
-    this.baseURL = 'http://localhost:8777/';
+  currentUser = new Subject<LoggedInUser>();
+
+  constructor(private httpClient: HttpClient , private router : Router) {
+    this.baseURL = environment.baseUrl
   }
 
   setUserNameAndPassword(userName: string, password: string) {
@@ -40,14 +46,21 @@ export class LoginService {
     this.httpClient.post<AuthResponseData>(this.baseURL + 'oauth/token', formData, {
       headers: new HttpHeaders({ Authorization: "Basic " + btoa(environment.clientUsername + ':' + environment.clientPassword) })
     }).subscribe(response => {
-      this.authResponse  = response;
-      console.log(this.authResponse)
-      // this.getDetails(userName).subscribe(response =>{
-      //   this.doctorDetail = response
-      // })
-    } , error =>{
+      this.authResponse = response;
+      const expires_in = new Date(new Date().getTime() + + response.expires_in * 1000);
+      const user = new LoggedInUser(userName , response.access_token , expires_in);
+      this.currentUser.next(user);
+      this.getDetails(userName).subscribe(newResponse => {
+        this.doctorDetail.next(newResponse)
+      })
+      this.router.navigateByUrl("/home")
+    }, error => {
       alert(error.error.error_description)
     })
+  }
+
+  getToken(): string {
+    return  this.authResponse.access_token;
   }
 
   registerDoctor(newDoctor: Register) {
@@ -64,13 +77,7 @@ export class LoginService {
     return this.httpClient.post(this.baseURL + 'register', formData)
   }
 
-  getDetails(userName : string) {
-
-    const param = new HttpParams()
-    param.set('userName' , userName)
-
-    return this.httpClient.get<Doctor>(this.baseURL + 'doctorService/detail' , {
-      params : param,
-    })
+  private getDetails(userName: string) {
+    return this.httpClient.get<Doctor>(this.baseURL + 'doctorService/detail?userName=' + userName)
   }
 }

@@ -1,0 +1,69 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand">Welcome Dr. {{ getDoctor().firstName +' '+ getDoctor().lastName }}</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <button class="btn btn-dark" type="button" routerLink="/home"><span class="material-icons md-18">
+              home
+            </span></button>
+        </li>
+        <li class="nav-item">
+          <button class="btn btn-dark" type="button" routerLink="/home" style="margin-left: 10px;"><span
+              class="material-icons md-18">
+              person_add
+            </span></button>
+        </li>
+      </ul>
+    </div>
+    <div class="container-xs-6">
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-dark" type="submit"><span class="material-icons md-18">
+            search
+          </span></button>
+      </form>
+    </div>
+    <div>
+      <button class="btn btn-danger" style="margin-left: 10px;">
+        <span class="material-icons md-18">
+          logout
+        </span></button>
+    </div>
+  </div>
+</nav>
+
+<div style="margin-top: 50px; margin-right: 50px; margin-left: 50px;">
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Sl. No</th>
+        <th scope="col">Patient ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Address</th>
+        <th scope="col">Contact Details</th>
+        <th scope="col">Date of Birth</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let patient of patient ; let i = index">
+      <tr>
+        <th scope="row">1</th>
+        <td>{{ patient.patientId }}</td>
+        <td>{{patient.firstName + ' ' + patient.lastName }}</td>
+        <td>{{ patient.address }}</td>
+        <td> <span class="material-icons md-18">
+          local_phone
+          </span> {{ patient.phoneNumber }} <br>
+          <span class="material-icons md-18">email</span> {{patient.userName }}
+        </td>
+        <td>{{ patient.dob }}</td>
+        <td><button class="btn btn-secondary">Record</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

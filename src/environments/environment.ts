@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   clientUsername :'patientService',
-  clientPassword :'patientService'
+  clientPassword :'patientService',
+  baseUrl : 'http://localhost:8777/'
 }
 
 /*
