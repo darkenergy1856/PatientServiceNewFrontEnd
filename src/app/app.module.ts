@@ -11,11 +11,13 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { InterceptorService } from './interceptor.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthGuard } from './services/authGuard.service';
 
 const appRoutes : Routes = [
   {path : '' , component : LoginComponent } ,
   {path : 'register' , component : RegisterComponent },
-  {path : 'home' , component : HomeComponent}
+  {path : 'home' , component : HomeComponent,canActivate:[AuthGuard],}
 
 ];
 
@@ -32,7 +34,8 @@ const appRoutes : Routes = [
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    MatIconModule
+    MatIconModule,
+    BrowserAnimationsModule
   ],
   providers: [{provide : HTTP_INTERCEPTORS , 
               useClass:InterceptorService , 

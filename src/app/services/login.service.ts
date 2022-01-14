@@ -6,6 +6,7 @@ import { Doctor } from '../Entity/doctor';
 import { LoggedInUser } from '../Entity/logged-in-user';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
 
 
 
@@ -23,15 +24,17 @@ export interface AuthResponseData {
   providedIn: 'root'
 })
 export class LoginService {
-  private baseURL: String
+  private baseURL: string
 
-  private authResponse = {} as AuthResponseData
+  private token: string = ''
+
+  private tokenExpirationTimer: any
 
   doctorDetail = new Subject<Doctor>()
 
   currentUser = new Subject<LoggedInUser>();
 
-  constructor(private httpClient: HttpClient , private router : Router) {
+  constructor(private httpClient: HttpClient, private router: Router) {
     this.baseURL = environment.baseUrl
   }
 
@@ -46,10 +49,12 @@ export class LoginService {
     this.httpClient.post<AuthResponseData>(this.baseURL + 'oauth/token', formData, {
       headers: new HttpHeaders({ Authorization: "Basic " + btoa(environment.clientUsername + ':' + environment.clientPassword) })
     }).subscribe(response => {
-      this.authResponse = response;
+      this.token = response.access_token
       const expires_in = new Date(new Date().getTime() + + response.expires_in * 1000);
-      const user = new LoggedInUser(userName , response.access_token , expires_in);
+      const user = new LoggedInUser(userName, response.access_token, expires_in);
       this.currentUser.next(user);
+      this.autoLogout(+response.expires_in*1000)
+      localStorage.setItem('userAuth', JSON.stringify(user))
       this.getDetails(userName).subscribe(newResponse => {
         this.doctorDetail.next(newResponse)
       })
@@ -59,8 +64,38 @@ export class LoginService {
     })
   }
 
+  autoLogin() {
+    if (localStorage.getItem('userAuth') != null) {
+      const tempUser: {
+        userName: string,
+        _token: string,
+        _expirationDate: string,
+      } = JSON.parse(localStorage.getItem('userAuth')!)
+      const LoggedIn = new LoggedInUser(tempUser.userName, tempUser._token, new Date(tempUser._expirationDate))
+      if (LoggedIn.token) {
+        const remainingDuration = new Date(tempUser._expirationDate).getTime() - new Date().getTime()
+        this.autoLogout(remainingDuration)
+        this.currentUser.next(LoggedIn)
+        this.token = LoggedIn.token
+        this.getDetails(tempUser.userName).subscribe(newResponse => {
+          this.doctorDetail.next(newResponse)
+        })
+      }
+      this.router.navigateByUrl("/home")
+    }
+    else
+      return;
+  }
+
+  autoLogout(expirationTime: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logOut()
+    }, expirationTime)
+  }
+
+
   getToken(): string {
-    return  this.authResponse.access_token;
+    return this.token
   }
 
   registerDoctor(newDoctor: Register) {
@@ -80,4 +115,18 @@ export class LoginService {
   private getDetails(userName: string) {
     return this.httpClient.get<Doctor>(this.baseURL + 'doctorService/detail?userName=' + userName)
   }
+
+  logOut() {
+    this.currentUser.next(new LoggedInUser('', '', new Date()))
+    this.token = ''
+    localStorage.removeItem('userAuth')
+    this.router.navigateByUrl("/")
+
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer)
+    }
+
+    this.tokenExpirationTimer = null
+  }
+
 }

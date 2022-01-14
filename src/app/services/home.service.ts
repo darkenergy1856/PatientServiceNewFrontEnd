@@ -14,7 +14,6 @@ export class HomeService {
   constructor(private httpClient : HttpClient) { }
 
   getAllPatient(doctorId : string){
-    console.log('Inside get all Patient')
     this.httpClient.get<Patient[]>(environment.baseUrl + 'patientService/findByDoctorId?doctorId=9835040885').subscribe(response =>{
       this.patient.next(response)
     })

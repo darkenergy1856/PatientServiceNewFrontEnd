@@ -49,6 +49,10 @@ export class HomeComponent implements OnInit , OnDestroy {
     return this.doctor
   }
 
+  onLogOut(){
+    this.loginService.logOut();
+  }
+
 
   ngOnDestroy(): void {
     this.loginSub.unsubscribe();

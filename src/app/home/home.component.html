@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+<nav class="navbar navbar-expand-lg head">
   <div class="container-fluid">
     <a class="navbar-brand">Welcome Dr. {{ getDoctor().firstName +' '+ getDoctor().lastName }}</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -7,11 +7,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item">
-          <button class="btn btn-dark" type="button" routerLink="/home"><span class="material-icons md-18">
-              home
-            </span></button>
-        </li>
         <li class="nav-item">
           <button class="btn btn-dark" type="button" routerLink="/home" style="margin-left: 10px;"><span
               class="material-icons md-18">
@@ -29,7 +24,7 @@
       </form>
     </div>
     <div>
-      <button class="btn btn-danger" style="margin-left: 10px;">
+      <button class="btn btn-danger" (click)="onLogOut()" style="margin-left: 10px;">
         <span class="material-icons md-18">
           logout
         </span></button>
@@ -62,7 +57,7 @@
           <span class="material-icons md-18">email</span> {{patient.userName }}
         </td>
         <td>{{ patient.dob }}</td>
-        <td><button class="btn btn-secondary">Record</button></td>
+        <td><button class="btn btn_css">Record</button></td>
       </tr>
     </tbody>
   </table>
