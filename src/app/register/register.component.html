@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark bg-primary">
+<nav class="navbar navbar-dark head">
     <div class="container-fluid">
         <span class="navbar-brand mb-0 h1">Register Yourself with US </span>
         <button class="btn btn-dark" type="button" routerLink="/">Login</button>
@@ -15,29 +15,37 @@
             <a routerLink="/">Log In</a>
         </div>
         <div class="alert alert-danger" role = "alert" *ngIf="getRegistrationStatus('errorOccured')">
-            Error Occured !! Try Again
+            Error Occured
         </div>
-        <form (ngSubmit)="onSubmit(registrationForm)"
-            #registrationForm="ngForm">
-            <div class="form-group">
+        <div class="alert alert-danger" role = "alert" *ngIf="!getRegistrationStatus('preCheck')">
+           Username or Doctor ID already in Use
+        </div>
+        <form (ngSubmit)="onSubmit(registrationForm)" #registrationForm="ngForm">
+            <div class="row">
+            <div class="col-md-6">
                 <label for="firstName">First Name</label>
                 <input type="text" id="firstName" class="form-control" ngModel name="firstName" required #firstName>
+            </div>
+            <div class="col-md-6">
                 <label for="lastName">Last Name</label>
                 <input type="text" id="lastName" class="form-control" ngModel name="lastName" #lastName>
             </div>
+        </div>
             <div class="form-group">
                 <label for="emailID">E-Mail</label>
                 <input type="email" id="emailID" class="form-control" ngModel name="userName" email required #userName>
             </div>
-            <div class="form-group">
+            <div class="row">
+            <div class="col-md-6">
                 <label for="doctorID">Doctor ID</label>
                 <input type="text" id="doctorID" class="form-control" ngModel name="doctorId" required #doctorId>
             </div>
-            <div class="form-group">
+            <div class="col-md-6">
                 <label for="phoneNumber">Phone Number</label>
                 <input type="number" id="phoneNumber" class="form-control" ngModel name="phoneNumber" required
                     #phoneNumber>
             </div>
+        </div>
             <div class="form-group">
                 <label for="description">Describe Yourself</label>
                 <input type="text" id="description" class="form-control" ngModel name="description" #description>
@@ -52,7 +60,7 @@
                     required>
             </div>
             <div style="margin-top: 10px;">
-                <button class="btn btn-success" [disabled]="!registrationForm.valid">Register</button>
+                <button class="btn btn_css" [disabled]="!registrationForm.valid">Register</button>
             </div>
         </form>
     </div>

@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Register } from '../Entity/register';
 import { environment } from 'src/environments/environment';
 import { Doctor } from '../Entity/doctor';
 import { LoggedInUser } from '../Entity/logged-in-user';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
-import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
-
-
 
 export interface AuthResponseData {
   access_token: string;
@@ -53,7 +50,7 @@ export class LoginService {
       const expires_in = new Date(new Date().getTime() + + response.expires_in * 1000);
       const user = new LoggedInUser(userName, response.access_token, expires_in);
       this.currentUser.next(user);
-      this.autoLogout(+response.expires_in*1000)
+      this.autoLogout(+response.expires_in * 1000)
       localStorage.setItem('userAuth', JSON.stringify(user))
       this.getDetails(userName).subscribe(newResponse => {
         this.doctorDetail.next(newResponse)
@@ -110,6 +107,10 @@ export class LoginService {
     formData.append('password', newDoctor.password)
 
     return this.httpClient.post(this.baseURL + 'register', formData)
+  }
+
+  checkDetail(userName: string, doctorId: string) {
+    return this.httpClient.get<boolean>(this.baseURL + 'doctorService/checkDoctor', { headers: { 'userName': userName, 'doctorId': doctorId } })
   }
 
   private getDetails(userName: string) {
