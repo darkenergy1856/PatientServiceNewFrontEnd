@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Doctor } from '../Entity/doctor';
 import { Patient } from '../Entity/patient';
@@ -23,10 +24,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   Check: boolean = true
 
-
-  constructor(private loginService: LoginService, private homeService: HomeService) { }
+  constructor(private loginService: LoginService, private homeService: HomeService , private router : Router) {}
 
   ngOnInit(): void {
+
     this.loginSub = this.loginService.doctorDetail.subscribe(doctorDetail => {
       this.doctor = doctorDetail
       this.homeService.getAllPatient(this.doctor.doctorId)
@@ -65,10 +66,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     })
   }
 
+  recordRedirect(patient : Patient){
+    this.homeService.recordRedirect(patient)
+  }
+
   ngOnDestroy(): void {
     this.loginSub.unsubscribe();
     this.homeSub.unsubscribe();
   }
-
 
 }

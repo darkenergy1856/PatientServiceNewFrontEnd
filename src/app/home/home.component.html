@@ -45,7 +45,7 @@
           <span class="material-icons md-18">email</span> {{patient.userName }}
         </td>
         <td>{{ patient.dob }}</td>
-        <td><button class="btn btn_css">Record</button></td>
+        <td><button class="btn btn_css"(click)="recordRedirect(patient)">Record</button></td>
       </tr>
     </tbody>
   </table>

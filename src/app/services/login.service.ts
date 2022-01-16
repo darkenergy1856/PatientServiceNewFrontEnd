@@ -4,7 +4,7 @@ import { Register } from '../Entity/register';
 import { environment } from 'src/environments/environment';
 import { Doctor } from '../Entity/doctor';
 import { LoggedInUser } from '../Entity/logged-in-user';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Router } from '@angular/router';
 
 export interface AuthResponseData {
@@ -27,7 +27,19 @@ export class LoginService {
 
   private tokenExpirationTimer: any
 
-  doctorDetail = new Subject<Doctor>()
+  emptyDoctor :Doctor = {
+    id  : '',
+    firstName : '',
+    lastName : '',
+    userName : '',
+    doctorId : '',
+    description : '',
+    phoneNumber : +'',
+  }
+
+  doctorDetail = new BehaviorSubject<Doctor>(this.emptyDoctor)
+
+  sentDoctorDetail !: Doctor
 
   currentUser = new Subject<LoggedInUser>();
 

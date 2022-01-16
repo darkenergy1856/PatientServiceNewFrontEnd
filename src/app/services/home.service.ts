@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Patient } from '../Entity/patient';
 
@@ -9,9 +10,11 @@ import { Patient } from '../Entity/patient';
 })
 export class HomeService {
 
-  patient = new Subject<Patient[]>()
+  patient = new BehaviorSubject<Patient[]>(null!)
 
-  constructor(private httpClient : HttpClient) { }
+  patientSent = new BehaviorSubject<Patient>(null!)
+
+  constructor(private httpClient : HttpClient , private router :Router) { }
 
   getAllPatient(doctorId : string){
     this.httpClient.get<Patient[]>(environment.baseUrl + 'patientService/findByDoctorId?doctorId=' + doctorId).subscribe(response =>{
@@ -31,6 +34,11 @@ export class HomeService {
     formData.append('userName',patient.userName)
 
     return this.httpClient.post<boolean>(environment.baseUrl + 'doctorService/addPatient' , formData)
+  }
+
+  recordRedirect(patient : Patient){
+    this.router.navigateByUrl('/record')
+    this.patientSent.next(patient)
   }
 
 

@@ -9,7 +9,6 @@ interface user {
   password : string
 }
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
