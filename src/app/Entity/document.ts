@@ -1,4 +1,4 @@
-export interface Document {
+export interface DocumentDetail {
     Id : Number,
     docName : string,
     patientId : string,

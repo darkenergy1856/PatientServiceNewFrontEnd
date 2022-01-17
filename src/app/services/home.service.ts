@@ -14,6 +14,8 @@ export class HomeService {
 
   patientSent = new BehaviorSubject<Patient>(null!)
 
+  doctorSent = new BehaviorSubject<string>(null!)
+
   constructor(private httpClient : HttpClient , private router :Router) { }
 
   getAllPatient(doctorId : string){
@@ -36,9 +38,10 @@ export class HomeService {
     return this.httpClient.post<boolean>(environment.baseUrl + 'doctorService/addPatient' , formData)
   }
 
-  recordRedirect(patient : Patient){
+  recordRedirect(patient : Patient ,  doctorId : string){
     this.router.navigateByUrl('/record')
-    this.patientSent.next(patient)
+    this.patientSent.next(patient);
+    this.doctorSent.next(doctorId);
   }
 
 

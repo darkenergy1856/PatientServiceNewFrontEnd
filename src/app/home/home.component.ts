@@ -24,6 +24,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   Check: boolean = true
 
+  UserName !: string
+  password !: string
+  addPatientSuccess: boolean = false;
+
   constructor(private loginService: LoginService, private homeService: HomeService , private router : Router) {}
 
   ngOnInit(): void {
@@ -58,16 +62,20 @@ export class HomeComponent implements OnInit, OnDestroy {
       userName: addForm.value.userName
     }
 
+    this.UserName = addForm.value.userName
+    this.password = addForm.value.firstName + '@' + addForm.value.phoneNumber
+
     this.homeService.addPatient(newPatient).subscribe(response => {
       this.homeService.getAllPatient(this.doctor.doctorId)
       this.Check = response
+      this.addPatientSuccess = response
     },()=>{
       this.Check = false
     })
   }
 
   recordRedirect(patient : Patient){
-    this.homeService.recordRedirect(patient)
+    this.homeService.recordRedirect(patient , this.doctor.doctorId)
   }
 
   ngOnDestroy(): void {

@@ -19,7 +19,7 @@ const appRoutes : Routes = [
   {path : '' , component : LoginComponent } ,
   {path : 'register' , component : RegisterComponent },
   {path : 'home' , component : HomeComponent,canActivate:[AuthGuard],},
-  {path : 'record' , component : RecordComponent },
+  {path : 'record' , component : RecordComponent , canActivate:[AuthGuard]},
 ];
 
 @NgModule({
