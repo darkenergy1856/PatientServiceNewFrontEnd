@@ -1,5 +1,5 @@
 export interface DocumentDetail {
-    Id : Number,
+    id : Number,
     docName : string,
     patientId : string,
     doctorId : string,

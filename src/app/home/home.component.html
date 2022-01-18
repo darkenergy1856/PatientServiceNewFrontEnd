@@ -1,21 +1,23 @@
 <nav class="navbar navbar-expand-lg head">
   <div class="container-fluid">
-    <h3 class="navbar-brand col-md-4">Welcome Dr. {{ getDoctor().firstName +' '+ getDoctor().lastName }}</h3>
-    <button class="btn btn-dark" type="button" data-bs-toggle="modal" data-bs-target="#addPatient"><span class="material-icons md-18">
+    <div class="d-flex">
+    <h4 >Welcome Dr. {{ getDoctor().firstName +' '+ getDoctor().lastName }}</h4>
+    <button class="btn btn-dark" style="margin-left: 1em;" type="button" data-bs-toggle="modal" data-bs-target="#addPatient"><span class="material-icons md-18">
         person_add
-      </span></button>
-    <div class="container-xs-6">
+      </span></button></div>
+    
+      <div class="d-flex">
       <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-dark" type="submit"><span class="material-icons md-18">
             search
           </span></button>
       </form>
-    </div>
+    
     <button class="btn btn-danger" (click)="onLogOut()" style="margin-left: 10px;">
       <span class="material-icons md-18">
         logout
-      </span></button>
+      </span></button></div>
   </div>
 </nav>
 

@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DocumentDetail } from '../Entity/document';
 import { Patient } from '../Entity/patient';
@@ -13,7 +13,7 @@ import { RecordService } from '../services/record.service';
 })
 export class RecordComponent implements OnInit, OnDestroy {
 
-  patient : Patient = {
+  patient: Patient = {
     firstName: '',
     lastName: '',
     address: '',
@@ -26,31 +26,57 @@ export class RecordComponent implements OnInit, OnDestroy {
 
   document = [] as DocumentDetail[]
 
-  doctorId : string = ''
+  doctorId: string = ''
 
   private redirectSub !: Subscription
 
   private doctorDetail !: Subscription
 
-  constructor(private homeService: HomeService , private recordService : RecordService) { }
+  File !: File
+
+  constructor(private homeService: HomeService, private recordService: RecordService) { }
 
   ngOnInit(): void {
-    this.redirectSub = this.homeService.patientSent.subscribe(res=>{
+    this.redirectSub = this.homeService.patientSent.subscribe(res => {
       this.patient = res
     });
 
-    this.recordService.fetchAll(this.patient.patientId!).subscribe(res=>{
+    this.recordService.fetchAll(this.patient.patientId!).subscribe(res => {
       this.document = res
     })
 
-    this.doctorDetail = this.homeService.doctorSent.subscribe(res=>{
+    this.doctorDetail = this.homeService.doctorSent.subscribe(res => {
       this.doctorId = res
     })
-    
+
 
   }
 
-  upload() {  }
+  selectedFile(event: { target: any; }) {
+    this.File = <File>event.target!.files[0];
+  }
+
+  viewFile(fileId : Number){
+    this.recordService.viewFile(fileId.toString()).subscribe(res=>{
+      console.log(res)
+    })
+  }
+
+  upload(description: HTMLTextAreaElement) {
+
+    const formData: FormData = new FormData()
+    formData.append('doctorId', this.doctorId)
+    formData.append('patientId', this.patient.patientId!)
+    formData.append('description', description.value)
+    formData.append('files', this.File)
+
+    this.recordService.uploadFile(formData).subscribe(res=>{
+      alert(res)
+      this.recordService.fetchAll(this.patient.patientId!).subscribe(res => {
+        this.document = res
+      })
+    })
+  }
 
   ngOnDestroy(): void {
     this.redirectSub.unsubscribe()

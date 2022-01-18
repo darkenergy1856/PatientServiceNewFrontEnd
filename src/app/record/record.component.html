@@ -23,9 +23,9 @@
             <div class="col-md-4">
                 <div class="row">
                     <div class="input-group">
-                        <input type="file" class="form-control" id="File">
+                        <input type="file" id="File" (change)="selectedFile($event)">
                         <button class="btn btn_css" type="button" id="inputGroupFileAddon04"
-                            (click)="upload()">Upload</button>
+                            (click)="upload(Description)">Upload</button>
                     </div>
                 </div>
                 <hr>
@@ -50,9 +50,9 @@
             <tr>
                 <th scope="row">{{ i + 1 }}</th>
                 <td>{{ document.doctorId }}</td>
-                <td>{{document.date }}</td>
+                <td>{{ document.date }}</td>
                 <td>{{ document.description }}</td>
-                <td><button class="btn btn_css">View</button></td>
+                <td><button class="btn btn_css" (click)="viewFile(document.id)">View</button></td>
             </tr>
         </tbody>
     </table>
