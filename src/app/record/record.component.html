@@ -52,7 +52,7 @@
                 <td>{{ document.doctorId }}</td>
                 <td>{{ document.date }}</td>
                 <td>{{ document.description }}</td>
-                <td><button class="btn btn_css" (click)="viewFile(document.id)">View</button></td>
+                <td><button class="btn btn_css" (click)="viewFile(document.id , document.patientId)">View</button></td>
             </tr>
         </tbody>
     </table>

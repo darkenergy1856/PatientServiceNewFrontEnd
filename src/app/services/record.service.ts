@@ -19,21 +19,8 @@ export class RecordService {
     return this.httpClient.post(environment.baseUrl + "fileService/uploadFile" , formData , {responseType: 'text'})
   }
 
-  viewFile(fileId : string){
-
-    return this.httpClient.get(environment.baseUrl + "fileService/downloadFile?fileId=" + fileId)
-
-    // console.log(fileId)
-
-    // const link = document.createElement('a');
-    // link.setAttribute(
-    //   'href',
-    //   environment.baseUrl + "fileService/downloadFile?fileId="+ fileId
-    // );
-
-    // document.body.appendChild(link);
-    // link.click();
-    // link.remove();
+  viewFile(fileId : string):Observable<Blob>{
+    return this.httpClient.get(environment.baseUrl + "fileService/downloadFile?fileId=" + fileId , { responseType: 'blob'} )
   }
 
 }

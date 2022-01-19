@@ -1,10 +1,11 @@
-import { HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component,OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DocumentDetail } from '../Entity/document';
 import { Patient } from '../Entity/patient';
 import { HomeService } from '../services/home.service';
 import { RecordService } from '../services/record.service';
+
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-record',
@@ -56,9 +57,9 @@ export class RecordComponent implements OnInit, OnDestroy {
     this.File = <File>event.target!.files[0];
   }
 
-  viewFile(fileId : Number){
+  viewFile(fileId : Number , patientId : string){
     this.recordService.viewFile(fileId.toString()).subscribe(res=>{
-      console.log(res)
+      saveAs(new Blob([res] , {type : res.type}),"record "+patientId)
     })
   }
 
