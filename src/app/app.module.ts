@@ -6,15 +6,15 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './Doctor/register/register.component';
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './Doctor/home/home.component';
 import { InterceptorService } from './services/interceptor.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthGuard } from './services/authGuard.service';
-import { RecordComponent } from './record/record.component';
-import { PatientHomeComponent } from './patient-home/patient-home.component';
+import { RecordComponent } from './Doctor/record/record.component';
+import { PatientHomeComponent } from './Patient/patient-home/patient-home.component';
 
 const appRoutes : Routes = [
   {path : '' , component : LoginComponent } ,

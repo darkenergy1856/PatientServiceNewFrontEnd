@@ -1,0 +1,47 @@
+<nav class="navbar navbar-dark head">
+    <div class="container-fluid">
+        <div class="column">
+            <div class="navbar-brand mb-0 h1">Patient Name : {{ patient.firstName + ' ' + patient.lastName }}</div>
+            <div class="navbar-brand mb-0 h1">Patient ID :{{ patient.patientId }}</div>
+        </div>
+        <!-- <button type="button" class="btn btn-dark" routerLink="/home"><span class="material-icons md-18">
+                home
+            </span></button> -->
+            <div class="d-flex">
+                <form class="d-flex">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-dark" type="submit"><span class="material-icons md-18">
+                      search
+                    </span></button>
+                </form>
+              
+              <button class="btn btn-danger" (click)="onLogOut()" style="margin-left: 10px;">
+                <span class="material-icons md-18">
+                  logout
+                </span></button></div>
+    </div>
+</nav>
+
+
+<div style="margin-top: 50px; margin-right: 50px; margin-left: 50px;">
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Sl. No</th>
+                <th scope="col">Doctor Id</th>
+                <th scope="col">Date</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let document of  document ; let i=index">
+            <tr>
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ document.doctorId }}</td>
+                <td>{{ document.date }}</td>
+                <td>{{ document.description }}</td>
+                <td><button class="btn btn_css" (click)="viewFile(document.id , document.patientId)">View</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

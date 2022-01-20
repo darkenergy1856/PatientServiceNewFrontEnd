@@ -15,6 +15,7 @@ export class AuthGuard implements CanActivate{
         if(this.loginService.getToken() &&  (this.loginService.getAuthority() === 'DOCTOR')){
             return true
         }else{
+            console.log("Redirected")
             return this.router.createUrlTree(['/'])
         }
      }

@@ -1,9 +1,9 @@
 import { Component,OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DocumentDetail } from '../Entity/document';
-import { Patient } from '../Entity/patient';
-import { HomeService } from '../services/home.service';
-import { RecordService } from '../services/record.service';
+import { DocumentDetail } from '../../Entity/document';
+import { Patient } from '../../Entity/patient';
+import { HomeService } from '../../services/home.service';
+import { RecordService } from '../../services/record.service';
 
 import {saveAs} from 'file-saver';
 
@@ -59,7 +59,7 @@ export class RecordComponent implements OnInit, OnDestroy {
 
   viewFile(fileId : Number , patientId : string){
     this.recordService.viewFile(fileId.toString()).subscribe(res=>{
-      saveAs(new Blob([res] , {type : res.type}),"record "+patientId)
+      saveAs(new Blob([res] , {type : res.type}),"record "+ patientId)
     })
   }
 

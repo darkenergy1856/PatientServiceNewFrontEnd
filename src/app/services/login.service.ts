@@ -6,6 +6,7 @@ import { Doctor } from '../Entity/doctor';
 import { LoggedInUser } from '../Entity/logged-in-user';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { Patient } from '../Entity/patient';
 
 export interface AuthResponseData {
   access_token: string;
@@ -38,7 +39,20 @@ export class LoginService {
     phoneNumber: +'',
   }
 
+  emptyPatient: Patient = {
+    patientId: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    doctorId: '',
+    phoneNumber: +'',
+    dob: '',
+    userName: '',
+  }
+
   doctorDetail = new BehaviorSubject<Doctor>(this.emptyDoctor)
+
+  patientDetail = new Subject<Patient>()
 
   sentDoctorDetail !: Doctor
 
@@ -65,14 +79,18 @@ export class LoginService {
         this.currentUser.next(user);
         this.autoLogout(+response.expires_in * 1000)
         localStorage.setItem('userAuth', JSON.stringify(user))
-        if(authority === 'DOCTOR'){
-          this.getDetails(userName).subscribe(newResponse => {
+        if (authority === 'DOCTOR') {
+          this.getDetailsDoctor(userName).subscribe(newResponse => {
             this.doctorDetail.next(newResponse)
           })
           this.router.navigateByUrl("/home")
         }
-        if(authority === 'PATIENT')
+        if (authority === 'PATIENT') {
+          this.getDetailsPatient(userName).subscribe(newResponse => {
+            this.patientDetail.next(newResponse)
+          })
           this.router.navigateByUrl("/patient")
+        }
 
       })
     }, error => {
@@ -110,10 +128,13 @@ export class LoginService {
     return this.httpClient.get<boolean>(environment.baseUrl + 'doctorService/checkDoctor', { headers: { 'userName': userName, 'doctorId': doctorId } })
   }
 
-  private getDetails(userName: string) {
+  private getDetailsDoctor(userName: string) {
     return this.httpClient.get<Doctor>(environment.baseUrl + 'doctorService/detail?userName=' + userName)
   }
 
+  private getDetailsPatient(userName: string) {
+    return this.httpClient.get<Patient>(environment.baseUrl + 'patientService/patientDetail?userName=' + userName)
+  }
 
   autoLogin() {
     if (localStorage.getItem('userAuth') != null) {
@@ -125,18 +146,27 @@ export class LoginService {
       } = JSON.parse(localStorage.getItem('userAuth')!)
       const LoggedIn = new LoggedInUser(tempUser.userName, tempUser._token, new Date(tempUser._expirationDate), tempUser._authorizationType)
       if (LoggedIn.token) {
+        this.authority = LoggedIn.authorizationType
         const remainingDuration = new Date(tempUser._expirationDate).getTime() - new Date().getTime()
         this.autoLogout(remainingDuration)
         this.currentUser.next(LoggedIn)
         this.token = LoggedIn.token
-        this.getDetails(tempUser.userName).subscribe(newResponse => {
-          this.doctorDetail.next(newResponse)
-        })
+        if (LoggedIn.authorizationType === 'DOCTOR') {
+          this.getDetailsDoctor(tempUser.userName).subscribe(newResponse => {
+            this.doctorDetail.next(newResponse)
+          })
+          this.router.navigateByUrl("/home")
+        }
+        if (LoggedIn.authorizationType === 'PATIENT') {
+          this.getDetailsPatient(tempUser.userName).subscribe(newResponse => {
+            this.patientDetail.next(newResponse)
+          })
+          this.router.navigateByUrl("/patient")
+        }
       }
-      this.router.navigateByUrl("/home")
+      else
+        return;
     }
-    else
-      return;
   }
 
   autoLogout(expirationTime: number) {

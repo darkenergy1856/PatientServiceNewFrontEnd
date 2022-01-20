@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Doctor } from '../Entity/doctor';
-import { Patient } from '../Entity/patient';
-import { HomeService } from '../services/home.service';
-import { LoginService } from '../services/login.service';
+import { Doctor } from '../../Entity/doctor';
+import { Patient } from '../../Entity/patient';
+import { HomeService } from '../../services/home.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-home',
