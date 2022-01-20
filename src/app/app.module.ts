@@ -14,12 +14,14 @@ import { InterceptorService } from './services/interceptor.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthGuard } from './services/authGuard.service';
 import { RecordComponent } from './record/record.component';
+import { PatientHomeComponent } from './patient-home/patient-home.component';
 
 const appRoutes : Routes = [
   {path : '' , component : LoginComponent } ,
   {path : 'register' , component : RegisterComponent },
   {path : 'home' , component : HomeComponent,canActivate:[AuthGuard],},
   {path : 'record' , component : RecordComponent , canActivate:[AuthGuard]},
+  {path : 'patient' , component : PatientHomeComponent}
 ];
 
 @NgModule({
@@ -29,6 +31,7 @@ const appRoutes : Routes = [
     LoginComponent,
     HomeComponent,
     RecordComponent,
+    PatientHomeComponent,
   ],
   imports: [
     BrowserModule,
